@@ -35,7 +35,7 @@ export const oabRegistrations: OabRegistration[] = [
 
 export const socialLinks: SocialLink[] = [
   { label: "Instagram", url: "https://www.instagram.com/thiagopires_adv/" },
-  { label: "YouTube", url: "https://www.youtube.com/channel/UC9hKVfMvx_KGzYUHopds5_Q" },
+  { label: "YouTube", url: "https://www.youtube.com/@thiagopires.advogado" },
   { label: "TikTok", url: "https://www.tiktok.com/@thiagopires_adv" },
   { label: "LinkedIn", url: "https://www.linkedin.com/in/thiago-pires-275917252" },
 ];
