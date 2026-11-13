@@ -1,0 +1,244 @@
+@import "tailwindcss";
+
+/* =========================================================
+   Identidade visual
+   Cores, fontes e animações ficam aqui. Para mudar a cor de
+   destaque do site inteiro, altere --color-gold.
+   ========================================================= */
+@theme {
+  --color-ink: #0b161b; /* fundo principal */
+  --color-ink-2: #0e1c22; /* fundo de seções alternadas */
+  --color-surface: #102129; /* cartões */
+  --color-surface-2: #163039; /* cartões em destaque */
+  --color-line: rgb(236 239 236 / 0.12); /* bordas e divisórias */
+  --color-text: #ecefec; /* texto principal */
+  --color-muted: #a3b4b9; /* texto secundário */
+  --color-gold: #c4a673; /* destaque (botões, ícones) */
+  --color-gold-light: #dcc59b; /* destaque claro (links) */
+  --color-gold-brand: #af9469; /* dourado exato da logo */
+
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-rise: rise 0.95s var(--ease-out-expo) both;
+  --animate-fade-up: fade-up 0.9s var(--ease-out-expo) both;
+  --animate-photo: photo 1.3s var(--ease-out-expo) both;
+  --animate-pop: pop 0.55s var(--ease-out-expo) both;
+  --animate-blink: blink 0.55s ease both;
+  --animate-ken-burns: ken-burns 2.6s var(--ease-out-expo) both;
+  --animate-marquee: marquee 80s linear infinite;
+
+  @keyframes rise {
+    from { transform: translateY(110%); }
+    to { transform: none; }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes photo {
+    from { opacity: 0; transform: translateY(28px) scale(0.97); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: translateY(10px) scale(0.9); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes blink {
+    0% { opacity: 0; }
+    30% { opacity: 1; }
+    45% { opacity: 0.25; }
+    60% { opacity: 1; }
+    75% { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+  @keyframes ken-burns {
+    from { transform: scale(1.12); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-ink);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold-light);
+    outline-offset: 4px;
+  }
+  [id] {
+    scroll-margin-top: 88px;
+  }
+}
+
+/* =========================================================
+   Componentes visuais reutilizáveis
+   ========================================================= */
+@layer components {
+  /* Brilho que atravessa o botão no hover */
+  .btn-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shine::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.45) 50%, transparent 70%);
+    transform: translateX(-120%);
+    pointer-events: none;
+  }
+  .btn-shine:hover::after {
+    transform: translateX(120%);
+    transition: transform 0.8s ease;
+  }
+
+  /* Camadas escuras sobre as imagens de fundo, para manter a leitura */
+  .overlay-hero {
+    background: linear-gradient(180deg, rgb(11 22 27 / 0.86) 0%, rgb(11 22 27 / 0.78) 55%, #0b161b 100%);
+  }
+  @media (min-width: 1024px) {
+    .overlay-hero {
+      background:
+        linear-gradient(90deg, rgb(11 22 27 / 0.94) 0%, rgb(11 22 27 / 0.74) 46%, rgb(11 22 27 / 0.22) 100%),
+        linear-gradient(180deg, rgb(11 22 27 / 0) 62%, #0b161b 100%);
+    }
+  }
+  .overlay-panel {
+    background: linear-gradient(180deg, #0e1c22 0%, rgb(14 28 34 / 0.78) 16%, rgb(14 28 34 / 0.86) 84%, #0e1c22 100%);
+  }
+  .overlay-veins {
+    background: linear-gradient(180deg, #0b161b 0%, rgb(11 22 27 / 0.5) 28%, rgb(11 22 27 / 0.5) 72%, #0b161b 100%);
+  }
+
+  /* Luz que segue o mouse nos cartões (valores definidos em SpotlightCard) */
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--spot-color, rgb(196 166 115 / 0.16)), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+
+  /* Contador animado: <span class="counter" style="--to: 13"> */
+  .counter {
+    --num: var(--to);
+    counter-reset: n var(--num);
+  }
+  .counter::before {
+    content: counter(n);
+  }
+
+  /* Barra de progresso de leitura no topo */
+  .scroll-progress {
+    display: none;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+}
+
+@property --num {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(48px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes lit {
+  from { opacity: 0.18; }
+  to { opacity: 1; }
+}
+@keyframes draw {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes count {
+  from { --num: 0; }
+  to { --num: var(--to); }
+}
+@keyframes grow {
+  to { transform: scaleX(1); }
+}
+@keyframes parallax {
+  from { transform: translateY(-6%); }
+  to { transform: translateY(6%); }
+}
+
+.tick-path {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 0;
+}
+
+/* =========================================================
+   Animações ligadas à rolagem
+   Funcionam no Chrome, Edge e Safari recente. Nos demais
+   navegadores o conteúdo aparece normalmente, sem efeito.
+   ========================================================= */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-progress {
+      display: block;
+      animation: grow linear both;
+      animation-timeline: scroll(root);
+    }
+    .scroll-reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 75%;
+    }
+    .scroll-lit {
+      animation: lit linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 48%;
+    }
+    .scroll-draw .tick-path {
+      animation: draw linear both;
+      animation-timeline: view();
+      animation-range: entry 40% cover 45%;
+    }
+    .scroll-count {
+      animation: count linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 42%;
+    }
+    .scroll-parallax {
+      animation: parallax linear both;
+      animation-timeline: view();
+    }
+  }
+}
+
+/* Respeita quem desativa animações no sistema */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
