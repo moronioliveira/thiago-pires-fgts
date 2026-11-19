@@ -71,10 +71,12 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR" className={`${bricolage.variable} ${manrope.variable}`}>
+      <head>
+        <GoogleTagManager />
+      </head>
       <body className="overflow-x-clip">
         <GoogleTagManagerNoScript />
         {children}
-        <GoogleTagManager />
       </body>
     </html>
   );
