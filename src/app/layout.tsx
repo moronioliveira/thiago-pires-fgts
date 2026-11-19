@@ -61,6 +61,10 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  // Verificação da propriedade no Google Search Console
+  verification: {
+    google: "igr12txU1HzfX6JdeEmHm44x9tz3Y2e6Y2OST-xYdto",
+  },
 };
 
 export const viewport: Viewport = {
